@@ -14,10 +14,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&amp;family=Inter:wght@400;500;600&amp;display=swap">
 <link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="atlas.css">
 <script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__site)document.documentElement.classList.remove('js')},4000)</script>
 </head>
-<!-- White hero. For the cinematic dark hero instead, use <body class="has-dark-hero">. -->
-<body>
+<body class="has-stage">
 
 <header class="site-header">
 <div class="wrap site-header__in">
@@ -31,25 +31,80 @@
 <main>
 
 <!-- ============ HERO ============ -->
-<section id="top" class="hero" aria-label="Welcome">
+<section id="top" class="journey" aria-label="Welcome">
+<div class="stage journey__pin">
 
-<!-- The globe is drawn by site.js. Its three locations are listed at the top of that file. -->
-<canvas class="globe" aria-hidden="true"></canvas>
+<!-- The globe is drawn by atlas.js. Its places are the three links below: edit data-lat and data-lon to move one. -->
+<canvas class="stage__globe" data-globe="home" aria-hidden="true"></canvas>
+<div class="stage__logo"><img src="assets/logo-dark.png" alt="inlightenup" width="2028" height="1828"></div>
+<p class="stage__hint fade-in" style="--d:1600ms">Drag to turn the globe</p>
 
-<div class="wrap hero__body">
-<div class="hero__copy">
-<p class="eyebrow eyebrow--accent fade-in">Impact venture capital · New York · Brazil · Italy</p>
-<h1 class="display"><span class="mask"><span style="--d:150ms">Structure</span></span><span class="mask"><span style="--d:300ms"><em>before story</em></span></span></h1>
-<p class="lead fade-in" style="--d:600ms">inlightenup is an impact venture capital firm. We back mission-driven ventures and NGOs by building the structure before telling the story: a twelve-month partnership that turns an idea, a founder or an early program into a fundable, institution-ready company.</p>
-<div class="hero__links fade-in" style="--d:750ms">
+<div class="wrap stage__foot">
+<h1 class="stage__title"><span class="eyebrow eyebrow--accent fade-in">Impact venture capital</span><span class="mask"><span style="--d:300ms">Structure</span></span><span class="mask"><span style="--d:450ms"><em>before story</em></span></span></h1>
+<nav class="stage__places fade-in" style="--d:900ms" aria-label="Where we work">
+<a class="stage__place" href="portfolio.html#new-york" data-place="new-york" data-name="New York" data-lat="40.7" data-lon="-74.0"><b>New York</b><small>40.7° N · 74.0° W</small></a>
+<a class="stage__place" href="portfolio.html#brazil" data-place="brazil" data-name="Brazil" data-lat="-15.8" data-lon="-47.9"><b>Brazil</b><small>15.8° S · 47.9° W</small></a>
+<a class="stage__place" href="portfolio.html#italy" data-place="italy" data-name="Italy" data-lat="41.9" data-lon="12.5"><b>Italy</b><small>41.9° N · 12.5° E</small></a>
+</nav>
+</div>
+</div>
+
+<!-- The journey. Each step below is one stop: as the page scrolls, the globe travels to the step's place
+     (data-place matches a place link above) and the step's words appear. Add, remove or reorder steps freely. -->
+<article class="journey__step" data-place="new-york" data-label="New York" data-zoom="1.5">
+<div class="journey__card">
+<p class="eyebrow"><span class="accent">01</span> · 40.7° N · 74.0° W</p>
+<h2 class="journey__name">New York</h2>
+<p class="journey__text">Our home base. Three ventures in technology, civic intelligence and workforce development are built from here.</p>
+<ul class="journey__list">
+<li><a href="portfolio.html#impactiq"><b>ImpactIQ</b><small>Technology</small></a></li>
+<li><a href="portfolio.html#goviq"><b>GovIQ</b><small>Civic technology</small></a></li>
+<li><a href="portfolio.html#north-beacon"><b>North Beacon</b><small>Workforce development</small></a></li>
+</ul>
+<a class="arrow-link" href="portfolio.html#new-york">Open New York in the atlas<svg width="72" height="12" viewBox="0 0 72 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M0 6h70M64 1l6 5-6 5"/></svg></a>
+</div>
+</article>
+
+<article class="journey__step" data-place="brazil" data-label="Brazil" data-zoom="1.45">
+<div class="journey__card">
+<p class="eyebrow"><span class="accent">02</span> · 15.8° S · 47.9° W</p>
+<h2 class="journey__name">Brazil</h2>
+<p class="journey__text">Three ventures across Brazil’s biomes: youth programming near Brasília, fair-trade supply chains from the Amazon and the Cerrado, and conservation in Tocantins.</p>
+<ul class="journey__list">
+<li><a href="portfolio.html#planting-seeds"><b>Planting Seeds</b><small>Youth programming</small></a></li>
+<li><a href="portfolio.html#ama-trade"><b>AMA Trade</b><small>Fair-trade supply chains</small></a></li>
+<li><a href="portfolio.html#terra-of-tomorrow"><b>Terra of Tomorrow</b><small>Conservation</small></a></li>
+</ul>
+<a class="arrow-link" href="portfolio.html#brazil">Open Brazil in the atlas<svg width="72" height="12" viewBox="0 0 72 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M0 6h70M64 1l6 5-6 5"/></svg></a>
+</div>
+</article>
+
+<article class="journey__step" data-place="italy" data-label="Italy" data-zoom="1.6">
+<div class="journey__card">
+<p class="eyebrow"><span class="accent">03</span> · 41.9° N · 12.5° E</p>
+<h2 class="journey__name">Italy</h2>
+<p class="journey__text">Our work in Italy will be published here soon.</p>
+<a class="arrow-link" href="portfolio.html#italy">Open Italy in the atlas<svg width="72" height="12" viewBox="0 0 72 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M0 6h70M64 1l6 5-6 5"/></svg></a>
+</div>
+</article>
+
+<article class="journey__step" data-label="inlightenup">
+<div class="journey__card">
+<p class="eyebrow"><span class="accent">Three places</span> · One method</p>
+<p class="lead">inlightenup is an impact venture capital firm. We back mission-driven ventures and NGOs by building the structure before telling the story: a twelve-month partnership that turns an idea, a founder or an early program into a fundable, institution-ready company.</p>
+<div class="intro__links">
+<a class="arrow-link" href="portfolio.html">Explore the portfolio atlas<svg width="72" height="12" viewBox="0 0 72 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M0 6h70M64 1l6 5-6 5"/></svg></a>
 <a class="arrow-link" href="#start">Start a fit conversation<svg width="72" height="12" viewBox="0 0 72 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M0 6h70M64 1l6 5-6 5"/></svg></a>
 <a class="arrow-link arrow-link--quiet" href="assets/inlightenup-methodology-2026.pdf">Read the methodology<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v13M6 10l6 6 6-6M4 21h16"/></svg></a>
 </div>
 </div>
-<a class="hero__scroll fade-in" style="--d:900ms" href="#glance" aria-label="Scroll to content">Scroll<svg width="12" height="40" viewBox="0 0 12 40" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 0v38M1 33l5 5 5-5"/></svg></a>
-</div>
+</article>
 
-<div class="wrap hero__strip fade-in" style="--d:900ms">
+</section>
+
+<!-- ============ INTRODUCTION ============ -->
+<section class="wrap intro" aria-label="Introduction">
+<div class="hero__strip reveal">
 <div class="hero__strip-brand">
 <img class="logo--dark" src="assets/logo-dark.png" alt="" width="2028" height="1828"><img class="logo--light" src="assets/logo-white.png" alt="" width="2028" height="1828">
 <p>We seed ventures by building the structure before telling the story.</p>
@@ -154,11 +209,11 @@
 <div class="medallion reveal">
 <svg viewBox="0 0 400 400" fill="none" stroke-linecap="round" aria-hidden="true">
 <defs><path id="ring-home" d="M200 200 m-170 0 a170 170 0 1 1 340 0 a170 170 0 1 1 -340 0"/></defs>
-<circle cx="200" cy="200" r="192" stroke="#F4EEE4" stroke-width="1.2" opacity=".55"/>
+<circle cx="200" cy="200" r="192" stroke="#FAFAFA" stroke-width="1.2" opacity=".55"/>
 <g class="medallion__ring"><text><textPath href="#ring-home" textLength="1060" lengthAdjust="spacing">ADVISORY · IN THE MAKING · COMING SOON · ADVISORY · IN THE MAKING · COMING SOON · </textPath></text></g>
 <g class="medallion__disc">
-<circle cx="200" cy="200" r="148" fill="#F4EEE4"/>
-<g class="frame" stroke="#560B38" stroke-width="1.6">
+<circle cx="200" cy="200" r="148" fill="#FAFAFA"/>
+<g class="frame" stroke="#002374" stroke-width="1.6">
 <path class="f" style="--n:0" pathLength="1" d="M92 276 H308"/>
 <path class="f" style="--n:1" pathLength="1" d="M125 276 V186"/>
 <path class="f" style="--n:2" pathLength="1" d="M175 276 V186"/>
@@ -168,8 +223,8 @@
 <path class="f" style="--n:6" pathLength="1" d="M108 186 L200 130 L292 186"/>
 <path class="f" style="--n:7" pathLength="1" d="M125 231 H275" opacity=".35"/>
 <path class="f" style="--n:8" pathLength="1" d="M200 130 V104"/>
-<circle class="halo" cx="200" cy="104" r="6" stroke="#7A1050"/>
-<circle class="node" cx="200" cy="104" r="5" fill="#7A1050" stroke="none"/>
+<circle class="halo" cx="200" cy="104" r="6" stroke="#0032A1"/>
+<circle class="node" cx="200" cy="104" r="5" fill="#0032A1" stroke="none"/>
 </g>
 </g>
 </svg>
@@ -337,7 +392,7 @@
 <span class="arrow-link">Download the PDF<svg width="72" height="12" viewBox="0 0 72 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M0 6h70M64 1l6 5-6 5"/></svg></span>
 </div>
 <div class="feature__art">
-<svg class="draw" viewBox="0 0 440 340" aria-hidden="true" fill="none" stroke="#1E1E1E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+<svg class="draw" viewBox="0 0 440 340" aria-hidden="true" fill="none" stroke="#333132" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
 <path class="draw__line" pathLength="1" d="M10 330 C120 330 160 320 200 290 L250 250 L300 190 L380 175 L430 120"/>
 <path d="M410 115 L432 118 L428 140"/>
 <rect class="draw__bar" style="--n:0" x="190" y="270" width="40" height="58" rx="6"/>
@@ -379,5 +434,6 @@
 <noscript><p class="wrap note" style="padding-block: 24px;"><a href="portfolio.html">Portfolio</a> · <a href="advisory.html">Advisory</a> · <a href="team.html">Team</a> · <a href="mailto:tahasiddiqui@inlightenup.org">Contact</a></p></noscript>
 
 <script src="site.js" defer></script>
+<script src="atlas.js" defer></script>
 </body>
 </html>

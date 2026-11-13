@@ -8,15 +8,16 @@
 <meta property="og:title" content="Portfolio | inlightenup">
 <meta property="og:description" content="Six ventures across the United States and Brazil, each held to the same rigor as an institutional investment.">
 <meta property="og:image" content="assets/logo-dark.png">
-<meta name="theme-color" content="#FFFFFF">
+<meta name="theme-color" content="#333132">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500&amp;family=Inter:wght@400;500;600&amp;display=swap">
 <link rel="stylesheet" href="site.css">
+<link rel="stylesheet" href="atlas.css">
 <script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__site)document.documentElement.classList.remove('js')},4000)</script>
 </head>
-<body>
+<body class="has-dark-hero">
 
 <header class="site-header">
 <div class="wrap site-header__in">
@@ -28,33 +29,26 @@
 </header>
 
 <main>
-<section class="wrap page-hero">
-<p class="eyebrow eyebrow--accent fade-in">Portfolio</p>
-<h1 class="display display--page"><span class="mask"><span style="--d:150ms">Six ventures</span></span><span class="mask"><span style="--d:300ms"><em>built to last</em></span></span></h1>
-<div class="page-hero__row">
-<p class="lead fade-in" style="--d:600ms">Across the United States and Brazil, each venture passes through the same five gates before it raises. Technology, civic intelligence, youth programming, fair-trade supply chains, workforce development and conservation.</p>
-<dl class="facts fade-in" style="--d:750ms">
-<div><dt>Ventures</dt><dd data-count>6</dd></div>
-<div><dt>Countries</dt><dd data-count>2</dd></div>
-<div><dt>Sectors</dt><dd data-count>6</dd></div>
-</dl>
+<!-- ============ ATLAS ============
+     atlas.js builds the globe, the list of places and the side panels from the
+     places and ventures written out below, so this page is edited the same way as before. -->
+<section class="atlas" id="atlas" aria-label="Portfolio atlas">
+<canvas class="atlas__globe" aria-hidden="true"></canvas>
+<div class="atlas__head">
+<p class="eyebrow">Portfolio atlas</p>
+<h1>Six ventures<br><em>across the world</em></h1>
+<p class="atlas__hint">Drag to turn · Select a place</p>
 </div>
 </section>
 
-<nav class="subnav" aria-label="Projects on this page" data-spy>
-<ul class="wrap">
-<li><a href="#impactiq">ImpactIQ</a></li>
-<li><a href="#goviq">GovIQ</a></li>
-<li><a href="#planting-seeds">Planting Seeds</a></li>
-<li><a href="#ama-trade">AMA Trade</a></li>
-<li><a href="#north-beacon">North Beacon</a></li>
-<li><a href="#terra-of-tomorrow">Terra of Tomorrow</a></li>
-</ul>
-</nav>
+<!-- To add a venture: copy one <article class="project"> block into its place and give it a new id.
+     Add data-lat and data-lon to give it its own marker; without them it sits on its place.
+     To add a place: copy one <section class="place"> block and set its name and coordinates. -->
+<div class="atlas-source wrap">
 
-<!-- To add a venture: copy one <article class="project"> block, give it a new id, and add a matching link in the nav above. -->
-<section class="wrap" aria-label="Projects">
-
+<section class="place" id="new-york" data-name="New York" data-country="United States" data-lat="40.71" data-lon="-74.01" data-zoom="2.1">
+<h2 class="h-lg">New York</h2>
+<p class="place__intro lead">Our home base. Three ventures in technology, civic intelligence and workforce development are built from here.</p>
 <article id="impactiq" class="project">
 <div class="project__main reveal">
 <p class="eyebrow"><span class="accent">01</span> · Technology · United States</p>
@@ -83,9 +77,28 @@
 </dl>
 </article>
 
-<article id="planting-seeds" class="project">
+<article id="north-beacon" class="project">
 <div class="project__main reveal">
-<p class="eyebrow"><span class="accent">03</span> · Youth programming · Brazil</p>
+<p class="eyebrow"><span class="accent">03</span> · Workforce development · United States</p>
+<h2 class="h-xl">North Beacon</h2>
+<p class="project__tagline">Building the workforce an AI-shaped economy will actually need.</p>
+<p class="body body--dark">As AI reshapes professional work, the skills that matter most are the human ones: judgment, emotional intelligence and purpose. North Beacon develops them. College students work on live projects with real impact instead of case interviews, guided by mentors from banking and entrepreneurship across three labs: Emotional Intelligence, Critical Thinking and Purpose. Partner institutions meet talent that has already proven itself.</p>
+</div>
+<dl class="spec line">
+<div><dt>Focus</dt><dd>Talent development through live advisory projects</dd></div>
+<div><dt>Where it stands</dt><dd>Program designed. 11 interns to date, 2 converted to active members</dd></div>
+<div><dt>inlightenup’s role</dt><dd>Program owner, delivered with Head Start Career and university partners</dd></div>
+</dl>
+</article>
+
+</section>
+
+<section class="place" id="brazil" data-name="Brazil" data-country="Cerrado and Amazon" data-lat="-10.5" data-lon="-52.0" data-zoom="2.0">
+<h2 class="h-lg">Brazil</h2>
+<p class="place__intro lead">Three ventures across Brazil’s biomes: youth programming near Brasília, fair-trade supply chains from the Amazon and the Cerrado, and conservation in the Jalapão region of Tocantins.</p>
+<article id="planting-seeds" class="project" data-lat="-15.79" data-lon="-47.88">
+<div class="project__main reveal">
+<p class="eyebrow"><span class="accent">04</span> · Youth programming · Brazil</p>
 <h2 class="h-xl">Planting Seeds</h2>
 <p class="project__tagline">Changing what a second chance looks like for a generation of young people.</p>
 <p class="body body--dark">Every youth justice system faces the same question: how do young people leave better than they arrived? Planting Seeds, a program of Instituto Meditativos, answers it with mindfulness inside socio-education centers near Brasília, reaching about 2,500 young people across roughly 700 sessions. Centers across Brazil are asking for it, and the model is built to scale one facilitator and one center at a time.</p>
@@ -98,9 +111,9 @@
 </dl>
 </article>
 
-<article id="ama-trade" class="project">
+<article id="ama-trade" class="project" data-lat="-3.1" data-lon="-60.0">
 <div class="project__main reveal">
-<p class="eyebrow"><span class="accent">04</span> · Fair-trade supply chains · Brazil</p>
+<p class="eyebrow"><span class="accent">05</span> · Fair-trade supply chains · Brazil</p>
 <h2 class="h-xl">AMA Trade</h2>
 <p class="project__tagline">Proving the forest is worth more standing than cleared.</p>
 <p class="body body--dark">Global demand for clean, traceable, natural ingredients keeps rising, and Brazil’s biomes are among the most biodiverse places on earth. AMA Trade connects the two. It sources premium Amazonian and Cerrado ingredients such as açaí, copaíba and buriti oil from Indigenous and traditional communities on fair-trade terms, and brings them to world markets as biocosmetics and commodities, including its own AMA Apothecary line.</p>
@@ -112,21 +125,7 @@
 </dl>
 </article>
 
-<article id="north-beacon" class="project">
-<div class="project__main reveal">
-<p class="eyebrow"><span class="accent">05</span> · Workforce development · United States</p>
-<h2 class="h-xl">North Beacon</h2>
-<p class="project__tagline">Building the workforce an AI-shaped economy will actually need.</p>
-<p class="body body--dark">As AI reshapes professional work, the skills that matter most are the human ones: judgment, emotional intelligence and purpose. North Beacon develops them. College students work on live projects with real impact instead of case interviews, guided by mentors from banking and entrepreneurship across three labs: Emotional Intelligence, Critical Thinking and Purpose. Partner institutions meet talent that has already proven itself.</p>
-</div>
-<dl class="spec line">
-<div><dt>Focus</dt><dd>Talent development through live advisory projects</dd></div>
-<div><dt>Where it stands</dt><dd>Program designed. 11 interns to date, 2 converted to active members</dd></div>
-<div><dt>inlightenup’s role</dt><dd>Program owner, delivered with Head Start Career and university partners</dd></div>
-</dl>
-</article>
-
-<article id="terra-of-tomorrow" class="project">
+<article id="terra-of-tomorrow" class="project" data-lat="-10.4" data-lon="-46.6">
 <div class="project__main reveal">
 <p class="eyebrow"><span class="accent">06</span> · Conservation · Brazil</p>
 <h2 class="h-xl">Terra of Tomorrow</h2>
@@ -142,6 +141,13 @@
 
 </section>
 
+<section class="place" id="italy" data-name="Italy" data-country="Rome" data-lat="41.9" data-lon="12.5" data-zoom="2.2">
+<h2 class="h-lg">Italy</h2>
+<p class="place__intro lead">Our work in Italy will be published here soon.</p>
+</section>
+
+</div>
+
 <section class="cta-band">
 <div class="wrap cta-band__in reveal">
 <h2 class="h-md">Building a venture that belongs on this page?</h2>
@@ -156,5 +162,6 @@
 <noscript><p class="wrap note" style="padding-block: 24px;"><a href="index.html">Home</a> · <a href="portfolio.html">Portfolio</a> · <a href="advisory.html">Advisory</a> · <a href="team.html">Team</a> · <a href="mailto:tahasiddiqui@inlightenup.org">Contact</a></p></noscript>
 
 <script src="site.js" defer></script>
+<script src="atlas.js" defer></script>
 </body>
 </html>

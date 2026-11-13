@@ -1,0 +1,360 @@
+/* ==========================================================================
+   inlightenup atlas: the globe behind the logo (home) and the portfolio atlas.
+   Built on the logo's own colours: charcoal and off-white. One accent, used
+   in small amounts: blue on light, periwinkle on charcoal.
+   ========================================================================== */
+:root {
+  --char: #333132;         /* logo charcoal */
+  --char-deep: #252425;
+  --off: #FAFAFA;          /* logo off-white */
+  --grey-1: #E6E6E6;
+  --grey-2: #A3A3A3;
+  --blue: #0032A1;         /* accent on light */
+  --peri: #6F90E8;         /* accent on charcoal */
+}
+
+/* 1. Home: logo over the globe -------------------------------------------- */
+.stage {
+  position: relative; isolation: isolate; overflow: hidden;
+  min-height: max(640px, 100svh); padding-top: var(--header-h);
+  display: flex; flex-direction: column; background: var(--off); color: var(--char);
+}
+.stage__globe {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; touch-action: pan-y;
+  --g-dot: 51,49,50; --g-accent: 0,50,161; --g-text: 51,49,50; --g-base: 250,250,250;
+}
+/* the logo sits at the centre of the globe (45% down the stage), on a soft pool of light so it stays crisp */
+.stage__logo {
+  position: absolute; left: 50%; top: 45%; transform: translate(-50%, -50%); pointer-events: none;
+  display: grid; place-items: center; width: clamp(200px, 30vh, 320px); aspect-ratio: 1;
+}
+.stage__logo::before {
+  content: ''; position: absolute; inset: -22%; border-radius: 50%; z-index: -1;
+  background: radial-gradient(closest-side, rgba(250, 250, 250, .96) 0 52%, rgba(250, 250, 250, .7) 72%, rgba(250, 250, 250, 0));
+}
+.stage__logo img { width: 78%; height: auto; }
+html.js .stage__logo { animation: logoIn 1.6s var(--ease) .2s backwards; }
+@keyframes logoIn { from { opacity: 0; transform: translate(-50%, -46%) scale(.94); } }
+
+.stage__foot {
+  margin-top: auto; padding-bottom: clamp(24px, 4vh, 44px);
+  display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px 48px;
+  pointer-events: none;
+}
+.stage__foot > * { pointer-events: auto; }
+.stage__title { font-family: var(--display); font-weight: 400; font-size: clamp(38px, 5.2vw, 76px); line-height: .98; letter-spacing: -.01em; }
+.stage__title em { color: #7C7A7B; }
+.stage__title .eyebrow { display: block; margin-bottom: 16px; }
+.stage__places { display: flex; gap: clamp(20px, 3vw, 44px); font-family: var(--sans); }
+.stage__place { display: block; padding: 10px 0 2px; border-top: 1px solid var(--char); min-width: 104px; }
+.stage__place:hover { opacity: 1; }
+.stage__place b { display: block; font-size: 12px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; }
+.stage__place small { display: block; margin-top: 4px; font-size: 11px; letter-spacing: .4px; color: var(--mute); font-variant-numeric: tabular-nums; }
+.stage__place::after { content: ''; display: block; margin-top: 8px; height: 2px; background: var(--blue); transform: scaleX(0); transform-origin: left; transition: transform .5s var(--ease); }
+.stage__place:hover::after, .stage__place:focus-visible::after { transform: scaleX(1); }
+.stage__hint { position: absolute; right: var(--gutter); top: calc(var(--header-h) + 8px); font-family: var(--sans); font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--mute); }
+
+.intro { padding-block: 0; }
+.intro__grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 32px 64px; align-items: end; padding-bottom: clamp(40px, 6vw, 72px); }
+.intro__links { display: flex; flex-direction: column; gap: 18px; align-items: flex-start; }
+
+/* 2. Portfolio atlas ------------------------------------------------------- */
+.atlas {
+  position: relative; isolation: isolate; overflow: hidden;
+  height: max(640px, 100svh); color: var(--off); font-family: var(--sans);
+  background: radial-gradient(120% 90% at 50% 42%, #3d3b3c 0%, var(--char) 46%, var(--char-deep) 100%);
+}
+.atlas__globe {
+  position: absolute; inset: 0; width: 100%; height: 100%; touch-action: pan-y;
+  --g-dot: 250,250,250; --g-accent: 111,144,232; --g-text: 250,250,250; --g-base: 51,49,50;
+}
+.atlas__frame { position: absolute; inset: 14px; border: 1px solid rgba(250, 250, 250, .1); pointer-events: none; }
+.atlas__frame::before, .atlas__frame::after { content: ''; position: absolute; width: 18px; height: 18px; border: 1px solid rgba(250, 250, 250, .6); }
+.atlas__frame::before { left: -1px; top: -1px; border-right: 0; border-bottom: 0; }
+.atlas__frame::after { right: -1px; bottom: -1px; border-left: 0; border-top: 0; }
+
+.atlas__head { position: absolute; left: var(--gutter); top: calc(var(--header-h) + 12px); max-width: 420px; pointer-events: none; transition: opacity .5s ease; }
+.atlas__head .eyebrow { color: var(--peri); margin-bottom: 14px; }
+.atlas__head h1 { font-family: var(--display); font-weight: 400; font-size: clamp(34px, 4vw, 58px); line-height: 1; letter-spacing: -.01em; }
+.atlas__head h1 em { color: rgba(250, 250, 250, .62); }
+.atlas__hint { margin-top: 16px; font-size: 11px; letter-spacing: 1.4px; text-transform: uppercase; color: rgba(250, 250, 250, .55); }
+
+/* places, down the left edge */
+.atlas__places { position: absolute; left: var(--gutter); top: 56%; transform: translateY(-50%); display: grid; gap: 2px; width: 230px; }
+.atlas__place {
+  display: grid; grid-template-columns: 30px 1fr auto; align-items: baseline; gap: 8px; width: 100%;
+  padding: 11px 0; border: 0; border-top: 1px solid rgba(250, 250, 250, .14); background: none; cursor: pointer;
+  color: rgba(250, 250, 250, .5); font: inherit; text-align: left; transition: color .3s ease, padding .5s var(--ease);
+}
+.atlas__place:hover, .atlas__place.is-active { color: var(--off); }
+.atlas__place.is-active { padding-left: 14px; }
+.atlas__place-n, .atlas__place-count { font-size: 10px; letter-spacing: 1.2px; font-variant-numeric: tabular-nums; }
+.atlas__place-name { font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+.atlas__place.is-active .atlas__place-n { color: var(--peri); }
+.atlas__place { position: relative; }
+.atlas__place::before { content: ''; position: absolute; left: 0; top: 50%; width: 6px; height: 6px; margin-top: -3px; background: var(--peri); transform: rotate(45deg) scale(0); transition: transform .5s var(--ease); }
+.atlas__place.is-active::before { transform: rotate(45deg) scale(1); }
+
+/* bottom bar */
+.atlas__bar {
+  position: absolute; left: var(--gutter); right: var(--gutter); bottom: 30px;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px;
+  padding-top: 14px; border-top: 1px solid rgba(250, 250, 250, .14);
+}
+.atlas__readout { font-size: 11px; letter-spacing: 1.4px; color: rgba(250, 250, 250, .6); font-variant-numeric: tabular-nums; white-space: pre; }
+.atlas__list-btn, .atlas__tool, .atlas__back, .atlas__filter, .atlas__step { font: inherit; cursor: pointer; background: none; border: 0; color: inherit; }
+.atlas__list-btn { display: inline-flex; align-items: center; gap: 12px; padding: 10px 4px; font-size: 11px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
+.atlas__list-btn span { width: 22px; height: 8px; border-block: 1px solid currentColor; transition: width .4s var(--ease); }
+.atlas__list-btn:hover span { width: 34px; }
+.atlas__tools { justify-self: end; display: flex; gap: 8px; }
+.atlas__tool { width: 40px; height: 40px; border: 1px solid rgba(250, 250, 250, .3); font-size: 18px; line-height: 1; transition: background .3s ease, color .3s ease; }
+.atlas__tool:hover { background: var(--off); color: var(--char); }
+.atlas :focus-visible { outline-color: var(--peri); }
+
+/* the panel that opens on the right, and the project list that opens on the left: off-white cards on the charcoal */
+.atlas__panel, .atlas__drawer {
+  position: absolute; top: calc(var(--header-h) - 8px); bottom: 30px; width: min(480px, calc(100% - 2 * var(--gutter)));
+  display: flex; flex-direction: column; background: var(--off); color: var(--char);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, .35); visibility: hidden; transition: transform .8s var(--ease), visibility 0s .8s;
+}
+.atlas__panel { right: var(--gutter); transform: translateX(calc(100% + var(--gutter) + 40px)); }
+.atlas__drawer { left: var(--gutter); transform: translateX(calc(-100% - var(--gutter) - 40px)); z-index: 2; }
+.atlas__panel.is-open, .atlas__drawer.is-open { transform: none; visibility: visible; transition-delay: 0s; }
+.atlas__panel :focus-visible, .atlas__drawer :focus-visible { outline-color: var(--blue); }
+.atlas__panel-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px 14px 28px; border-bottom: 1px solid var(--grey-1); }
+.atlas__back { padding: 8px 0; font-size: 11px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; }
+.atlas__back:hover { color: var(--blue); }
+.atlas__panel-body { flex: 1; overflow-y: auto; padding: 28px; outline: 0; font-family: var(--serif); }
+.atlas__panel-body > * + * { margin-top: 16px; }
+.atlas__panel-body .eyebrow { font-size: 11px; }
+.atlas__title { font-family: var(--display); font-weight: 400; font-size: clamp(36px, 3.4vw, 50px); line-height: 1; letter-spacing: -.01em; }
+.atlas__country { margin-top: 6px !important; font-family: var(--sans); font-size: 12px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--mute); }
+.atlas__intro { font-size: 19px; line-height: 1.45; color: var(--ink-2); }
+.atlas__label { margin-top: 28px !important; padding-bottom: 10px; border-bottom: 1px solid var(--char); font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; }
+.atlas__venture {
+  display: grid; grid-template-columns: 30px 1fr auto; gap: 12px; align-items: start; width: 100%; margin-top: 0 !important;
+  padding: 18px 0; border: 0; border-bottom: 1px solid var(--grey-1); background: none; cursor: pointer; text-align: left; color: inherit; font: inherit;
+}
+.atlas__venture-n { font-family: var(--sans); font-size: 11px; letter-spacing: 1px; color: var(--blue); padding-top: 7px; }
+.atlas__venture strong { display: block; font-family: var(--display); font-weight: 400; font-size: 27px; line-height: 1.1; }
+.atlas__venture small { display: block; margin-top: 6px; font-family: var(--sans); font-size: 10.5px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--mute); }
+.atlas__venture em { display: block; margin-top: 8px; font-size: 16.5px; line-height: 1.35; color: var(--ink-3); }
+.atlas__venture svg { margin-top: 12px; color: var(--grey-2); transition: transform .5s var(--ease), color .3s ease; }
+.atlas__venture:hover svg { transform: translateX(6px); color: var(--char); }
+.atlas__panel-body .project__tagline { font-size: 21px; margin-bottom: 0; }
+.atlas__panel-body .body { font-size: 17.5px; line-height: 1.5; }
+.atlas__panel-body .note { font-size: 12px; }
+.atlas__spec { margin-top: 24px !important; border-top: 1px solid var(--char); }
+.atlas__spec > div { padding: 14px 0; }
+.atlas__spec dd { font-size: 17px; }
+.atlas__panel-foot { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--grey-1); font-family: var(--sans); }
+.atlas__panel-foot:empty { display: none; }
+.atlas__step { padding: 14px 28px; text-align: left; transition: background .3s ease; }
+.atlas__step--next { text-align: right; border-left: 1px solid var(--grey-1); }
+.atlas__step:hover { background: var(--grey-1); }
+.atlas__step small { display: block; font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--mute); }
+.atlas__step span { display: block; margin-top: 4px; font-family: var(--display); font-size: 18px; }
+
+.atlas__drawer-title { padding: 28px 28px 20px; font-family: var(--display); font-weight: 400; font-size: clamp(44px, 4.4vw, 64px); line-height: .95; letter-spacing: -.01em; }
+.atlas__drawer-title em { color: #7C7A7B; }
+.atlas__drawer .eyebrow { font-size: 11px; }
+.atlas__rows { flex: 1; overflow-y: auto; border-top: 1px solid var(--char); }
+.atlas__row { display: flex; justify-content: space-between; align-items: center; gap: 16px; width: 100%; padding: 15px 28px; border: 0; border-bottom: 1px solid var(--grey-1); background: none; cursor: pointer; text-align: left; color: inherit; font: inherit; transition: background .3s ease, padding .5s var(--ease); }
+.atlas__row:hover { background: var(--grey-1); padding-left: 36px; }
+.atlas__row strong { display: block; font-family: var(--display); font-weight: 400; font-size: 21px; }
+.atlas__row small { display: block; margin-top: 3px; font-size: 11px; color: var(--mute); }
+.atlas__row-place { font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--mute); white-space: nowrap; }
+.atlas__filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 14px 28px; border-top: 1px solid var(--grey-1); }
+.atlas__filters span { margin-right: auto; font-size: 10px; letter-spacing: 1.6px; text-transform: uppercase; color: var(--mute); }
+.atlas__filter { padding: 8px 12px; border: 1px solid var(--char); font-size: 10.5px; font-weight: 600; letter-spacing: 1.4px; text-transform: uppercase; }
+.atlas__filter[aria-pressed="true"] { background: var(--char); color: var(--off); }
+
+/* the plain list the atlas is built from: shown only when the script has not run */
+.atlas-on .atlas-source { display: none; }
+.atlas-source .place { padding-top: 64px; }
+.atlas-source .place > h2 { margin-bottom: 12px; }
+html:not(.atlas-on) .atlas { height: auto; padding: calc(var(--header-h) + 32px) 0 48px; }
+html:not(.atlas-on) .atlas__globe { display: none; }
+html:not(.atlas-on) .atlas__head { position: static; margin-inline: var(--gutter); }
+
+/* 3. Motion ---------------------------------------------------------------- */
+.rise { animation: rise .7s var(--ease) both; animation-delay: calc(var(--i, 0) * 60ms + 120ms); }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }
+.atlas-on .atlas__head, .atlas-on .atlas__places, .atlas-on .atlas__bar { animation: rise 1s var(--ease) .5s both; }
+.atlas-on .atlas__places { animation-name: riseMid; animation-delay: .7s; }
+@keyframes riseMid { from { opacity: 0; transform: translateY(calc(-50% + 14px)); } }
+.atlas-on .atlas__bar { animation-delay: .9s; }
+.atlas.has-drawer .atlas__places, .atlas.has-drawer .atlas__head, .atlas.has-panel .atlas__head { opacity: 0 !important; pointer-events: none; transition: opacity .5s ease; }
+
+/* 4. Small screens, reduced motion ---------------------------------------- */
+@media (max-width: 899px) {
+  .stage__foot { flex-direction: column; align-items: flex-start; }
+  .stage__places { width: 100%; }
+  .stage__place { flex: 1; min-width: 0; }
+  .stage__place small { font-size: 10px; letter-spacing: 0; white-space: nowrap; }
+  .stage__logo { top: 40%; width: clamp(150px, 42vw, 220px); }
+  .stage__hint { display: none; }
+  .intro__grid { grid-template-columns: 1fr; }
+
+  .atlas__head { top: calc(var(--header-h) + 4px); }
+  .atlas__head h1 { font-size: 30px; }
+  .atlas__hint { display: none; }
+  .atlas__places { top: auto; bottom: 92px; transform: none; width: auto; right: var(--gutter); display: flex; gap: 0; overflow-x: auto; }
+  .atlas-on .atlas__places { animation-name: rise; }
+  .atlas__place { flex: none; width: auto; grid-template-columns: auto auto; padding: 12px 16px 12px 0; }
+  .atlas__place.is-active { padding-left: 14px; }
+  .atlas__place-count { display: none; }
+  .atlas__bar { grid-template-columns: auto auto; justify-content: space-between; bottom: 22px; }
+  .atlas__readout { display: none; }
+  .atlas__panel, .atlas__drawer { left: 0; right: 0; width: auto; top: 34%; bottom: 0; }
+  .atlas__drawer { top: var(--header-h-stuck); }
+  .atlas__panel { transform: translateY(105%); }
+  .atlas__drawer { transform: translateY(105%); }
+  .atlas.has-panel .atlas__head, .atlas.has-panel .atlas__places { opacity: 0; pointer-events: none; }
+  .atlas__panel-body { padding: 22px 20px; }
+  .atlas__step { padding: 12px 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rise, .atlas-on .atlas__head, .atlas-on .atlas__places, .atlas-on .atlas__bar, html.js .stage__logo { animation: none; }
+  .atlas__panel, .atlas__drawer { transition: none; }
+}
+
+/* the header logo steps aside while the large one is on screen */
+.has-stage .site-header__logo { transition: opacity .5s ease; }
+.has-stage .site-header:not(.is-stuck) .site-header__logo { opacity: 0; pointer-events: none; }
+
+/* 5. The journey: the globe stays put while the page scrolls past it -------- */
+.journey { position: relative; }
+.journey__pin { position: sticky; top: 0; height: 100svh; min-height: 0; }
+/* a wash of off-white that comes up behind the words as the journey starts (--veil is set by atlas.js) */
+.journey__pin::after {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: var(--veil, 0);
+  background: linear-gradient(90deg, var(--off) 0 30%, rgba(250, 250, 250, .82) 44%, rgba(250, 250, 250, 0) 62%);
+}
+.journey__step { position: relative; z-index: 2; min-height: 100svh; display: flex; align-items: center; pointer-events: none; }
+.journey__card {
+  pointer-events: auto; width: min(470px, 40vw);
+  margin-left: max(var(--gutter), calc((100vw - var(--max)) / 2 + var(--gutter)));
+}
+.journey__card > * + * { margin-top: 20px; }
+.journey__name { font-family: var(--display); font-weight: 400; font-size: clamp(54px, 7vw, 104px); line-height: .95; letter-spacing: -.015em; }
+.journey__text { font-size: clamp(18px, 1.6vw, 21px); line-height: 1.45; color: var(--ink-3); }
+.journey__list { border-top: 1px solid var(--char); }
+.journey__list a { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--grey-1); transition: padding .5s var(--ease); }
+.journey__list a:hover { opacity: 1; padding-left: 10px; }
+.journey__list b { font-family: var(--display); font-weight: 400; font-size: 23px; }
+.journey__list small { font-family: var(--sans); font-size: 10.5px; letter-spacing: 1.4px; text-transform: uppercase; color: var(--mute); text-align: right; }
+.journey__card .arrow-link { margin-top: 28px; }
+.journey__card .intro__links { margin-top: 28px; }
+.journey__card .intro__links .arrow-link { margin-top: 0; }
+
+/* with the script running, each stop's words arrive as its place does */
+.journey-on .journey__card > * { opacity: 0; transform: translateY(28px); transition: opacity .5s ease, transform .9s var(--ease); }
+.journey-on .journey__step.is-current .journey__card > * { opacity: 1; transform: none; transition-delay: calc(var(--k, 0) * 70ms + 150ms); }
+.journey__card > :nth-child(2) { --k: 1; } .journey__card > :nth-child(3) { --k: 2; } .journey__card > :nth-child(4) { --k: 3; } .journey__card > :nth-child(5) { --k: 4; }
+.journey-on .stage__hint { transition: opacity .4s ease; }
+.journey-under-way .stage__hint { opacity: 0 !important; }
+.journey-under-way .has-stage .site-header .site-header__logo, .journey-under-way.journey-on .site-header .site-header__logo { opacity: 1 !important; pointer-events: auto !important; }
+
+/* the rail on the right: where you are on the journey */
+.journey__rail { position: absolute; right: var(--gutter); top: 50%; transform: translateY(-50%); display: grid; gap: 14px; justify-items: end; opacity: 0; transition: opacity .6s ease; }
+.journey-under-way .journey__rail { opacity: 1; }
+.journey__tick { display: flex; align-items: center; gap: 12px; padding: 4px 0; border: 0; background: none; cursor: pointer; color: var(--mute); font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; }
+.journey__tick span { opacity: 0; transform: translateX(8px); transition: opacity .4s ease, transform .5s var(--ease); }
+.journey__tick i { width: 18px; height: 1px; background: currentColor; transition: width .5s var(--ease), background .3s ease; }
+.journey__tick:hover span, .journey__tick.is-on span { opacity: 1; transform: none; }
+.journey__tick.is-on { color: var(--char); }
+.journey__tick.is-on i { width: 44px; background: var(--blue); height: 2px; }
+.journey__tick.is-done i { background: var(--char); }
+
+@media (max-width: 859px) {
+  .journey__pin::after { background: linear-gradient(0deg, var(--off) 0 46%, rgba(250, 250, 250, .85) 56%, rgba(250, 250, 250, 0) 70%); }
+  .journey__step { align-items: flex-end; padding-bottom: 7svh; }
+  .journey__card { width: auto; margin-inline: var(--gutter); }
+  .journey__card > * + * { margin-top: 14px; }
+  .journey__name { font-size: 48px; }
+  .journey__list a { padding: 9px 0; }
+  .journey__list b { font-size: 20px; }
+  .journey__rail { top: calc(var(--header-h) + 8px); transform: none; display: flex; gap: 8px; }
+  .journey__tick span { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .journey-on .journey__card > * { transition: none; transform: none; }
+}
+
+/* 6. Scroll scenes further down the home page ----------------------------- */
+/* mission and vision: words light up as they are read (opacity is set by atlas.js) */
+.lit { transition: opacity .35s ease; }
+
+/* methodology: the five stages as a path. Built by atlas.js from the stage list and the gates table;
+   on phones, and without the script, the ordinary list and table show instead. */
+.path { display: none; }
+.path-on .path { display: block; height: calc(var(--n, 5) * 80svh + 100svh); }
+.path-on ol.stages, .path-on .gates-head, .path-on .table-scroll { display: none; }
+.path__pin {
+  position: sticky; top: var(--header-h-stuck); height: calc(100svh - var(--header-h-stuck));
+  display: flex; flex-direction: column; justify-content: center; gap: clamp(28px, 6vh, 64px);
+}
+.path__track { position: relative; display: grid; grid-template-columns: repeat(var(--n, 5), 1fr); border-top: 1px solid var(--grey-1); }
+.path__fill { position: absolute; left: 0; top: -2px; width: 100%; height: 3px; background: var(--char); transform-origin: left; transform: scaleX(var(--p, 0)); transition: transform .25s linear; }
+.path__node { position: relative; padding: 22px 12px 0 0; border: 0; background: none; cursor: pointer; text-align: left; color: var(--grey-2); font-family: var(--sans); transition: color .4s ease; }
+.path__node i { position: absolute; left: 1px; top: -7px; width: 12px; height: 12px; border: 1px solid currentColor; background: var(--paper); transform: rotate(45deg); transition: background .4s ease, border-color .4s ease, transform .6s var(--ease); }
+.path__node span { display: block; font-size: 12px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; white-space: pre; }
+.path__node small { display: block; margin-top: 5px; font-size: 11px; letter-spacing: .3px; }
+.path__node.is-done { color: var(--ink-3); }
+.path__node.is-done i { background: var(--char); border-color: var(--char); }
+.path__node.is-on { color: var(--char); }
+.path__node.is-on i { border-color: var(--blue); transform: rotate(45deg) scale(1.35); }
+.path__node.is-on.is-done i { background: var(--blue); }
+.path__body { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: clamp(32px, 6vw, 96px); align-items: center; }
+.path__stage { display: flex; align-items: flex-end; gap: clamp(20px, 3vw, 44px); }
+.path__num { font-family: var(--display); font-size: clamp(170px, 30vh, 300px); line-height: 1; margin-bottom: -.12em; letter-spacing: -.04em; min-width: .6em; }
+.path__name { font-family: var(--display); font-weight: 400; font-size: clamp(40px, 4.6vw, 72px); line-height: 1; margin-top: 10px; }
+.path__text { margin-top: 14px; font-size: clamp(18px, 1.6vw, 21px); line-height: 1.4; color: var(--ink-3); max-width: 420px; }
+.path__gate { border-top: 1px solid var(--char); }
+.path__code { padding: 14px 0; }
+.path__check { display: grid; grid-template-columns: 30px 1fr; padding: 16px 0; border-top: 1px solid var(--grey-1); opacity: .25; transition: opacity .6s ease; }
+.path__check::before { content: ''; grid-row: span 2; width: 16px; height: 16px; margin-top: 2px; border: 1px solid var(--char); box-shadow: inset 0 0 0 3px var(--paper); transition: background .5s ease; }
+.path__check b { font-family: var(--sans); font-size: 10.5px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; }
+.path__check p { margin-top: 6px; font-size: 19px; line-height: 1.35; }
+.path__check.is-on { opacity: 1; }
+.path__check.is-on::before { background: var(--char); }
+.path__clear { display: inline-block; margin-top: 16px; padding: 8px 12px; border: 1px solid var(--blue); color: var(--blue); font-family: var(--sans); font-size: 10.5px; font-weight: 600; letter-spacing: 1.8px; text-transform: uppercase; opacity: 0; transform: translateY(8px) rotate(-2deg); transition: opacity .4s ease, transform .6s var(--ease); }
+.path__clear.is-on { opacity: 1; transform: rotate(-2deg); }
+.path__note { max-width: 620px; font-family: var(--sans); font-size: 13px; line-height: 1.5; color: var(--mute); }
+.path__body.is-swapping .path__num, .path__body.is-swapping .path__stage > div, .path__body.is-swapping .path__gate { animation: rise .7s var(--ease) both; }
+.path__body.is-swapping .path__stage > div { animation-delay: 80ms; }
+.path__body.is-swapping .path__gate { animation-delay: 160ms; }
+
+/* transformation sequence: above and below the waterline */
+.dive .duo { display: block; }
+.dive .duo > div, .dive .duo > div + div { position: relative; isolation: isolate; display: flex; flex-direction: column; border: 0; padding: 40px 0 56px; }
+.dive .duo > div { justify-content: flex-end; min-height: 300px; }
+.dive .duo > div + div { justify-content: flex-start; min-height: max(76svh, 680px); padding-top: 72px; }
+.dive .duo > div > :not(svg):not(.dive__line) { max-width: min(520px, 52%); }
+/* the water: a full-width band that darkens with depth */
+.dive .duo > div + div::before {
+  content: ''; position: absolute; z-index: -2; top: 0; bottom: calc(-1 * var(--section)); left: 50%; width: 100vw; transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(111, 144, 232, .16), rgba(111, 144, 232, .04) 30%, rgba(0, 0, 0, calc(.1 + .32 * var(--depth, 0))) 100%);
+  border-top: 1px solid rgba(250, 250, 250, .55);
+}
+.dive__line { position: absolute; right: 0; top: -9px; padding-left: 12px; background: var(--ink); font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--peri); }
+.dive__ice { position: absolute; z-index: -1; right: 6%; width: min(38vw, 460px); height: auto; max-width: none; stroke: rgba(250, 250, 250, .8); stroke-width: 1.2; stroke-linejoin: round; pointer-events: none; }
+.dive__ice--tip { bottom: 0; }
+.dive__ice--mass { top: 0; stroke: rgba(250, 250, 250, .5); }
+.dive__ice path { stroke-dasharray: 1; stroke-dashoffset: 1; vector-effect: non-scaling-stroke; transition: stroke-dashoffset 2.6s var(--ease); }
+.dive__ice path + path { stroke-width: .7; opacity: .55; transition-delay: .8s; }
+.dive__ice.is-in path { stroke-dashoffset: 0; }
+.dive .duo .ai b { color: var(--peri); }
+
+@media (max-width: 899px) {
+  .dive .duo > div > :not(svg):not(.dive__line) { max-width: none; }
+  .dive__ice { right: 0; width: 62vw; opacity: .28; }
+  .dive .duo > div { min-height: 0; padding-top: 150px; }
+  .dive .duo > div + div { min-height: 0; padding-top: 56px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .dive__ice path { transition: none; stroke-dashoffset: 0; }
+  .path__body.is-swapping * { animation: none !important; }
+  .path__fill { transition: none; }
+}

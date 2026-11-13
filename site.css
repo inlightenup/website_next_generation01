@@ -10,21 +10,21 @@
 
 /* 1. Tokens ---------------------------------------------------------------- */
 :root {
-  --ink: #1E1E1E;
+  --ink: #333132;
   --ink-2: #3A3A3A;
   --ink-3: #4A4A4A;
   --mute: #5A5A5A;
   --rule: #D6D6D6;
   --paper: #FFFFFF;
   --wash: #F5F5F3;
-  --accent: #7A1050;
+  --accent: #0032A1;
   --on-dark: #E2E2E2;
   --on-dark-mute: #BDBDBD;
-  --sky: #9EE6F5;
-  --night: #141114;        /* dark hero background */
-  --accent-deep: #560B38;  /* full-bleed burgundy panels */
-  --cream: #F4EEE4;        /* type and line work on burgundy */
-  --rose: #E8A6CB;         /* accent on dark backgrounds */
+  --sky: #00B5E2;
+  --night: #00123B;        /* dark hero background */
+  --accent-deep: #002374;  /* full-bleed navy panels */
+  --cream: #FAFAFA;        /* type and line work on navy */
+  --rose: #00B5E2;         /* accent on dark backgrounds */
 
   --serif: 'EB Garamond', Garamond, Georgia, serif;
   --display: 'Bodoni Moda', 'EB Garamond', Georgia, serif;
@@ -168,7 +168,7 @@ section[id], article[id] { scroll-margin-top: calc(var(--header-h-stuck) + 16px)
 .menu.is-open { visibility: visible; transition-delay: 0s; }
 .menu__scrim {
   position: absolute; inset: 0; border: 0; padding: 0; cursor: pointer;
-  background: rgba(30, 30, 30, .32); opacity: 0; transition: opacity .5s ease;
+  background: rgba(51, 49, 50, .32); opacity: 0; transition: opacity .5s ease;
 }
 .menu__panel {
   position: relative; width: 360px; max-width: 86%; height: 100%; overflow-y: auto;
@@ -219,7 +219,7 @@ section[id], article[id] { scroll-margin-top: calc(var(--header-h-stuck) + 16px)
   width: min(620px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; overflow: auto;
   border: 1px solid var(--ink); background: var(--paper); color: var(--ink);
 }
-.contact::backdrop { background: rgba(30, 30, 30, .5); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
+.contact::backdrop { background: rgba(51, 49, 50, .5); -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px); }
 .contact[open] { animation: dialogIn .55s var(--ease); }
 .contact[open]::backdrop { animation: backdropIn .4s ease; }
 .contact__in { position: relative; padding: clamp(24px, 4.5vw, 48px); }
@@ -267,7 +267,7 @@ section[id], article[id] { scroll-margin-top: calc(var(--header-h-stuck) + 16px)
   min-height: clamp(680px, 100svh, 900px); padding-top: var(--header-h);
   display: flex; flex-direction: column; justify-content: flex-end;
 }
-.hero { --g-line: 30, 30, 30; --g-accent: 122, 16, 80; --g-text: 30, 30, 30; }
+.hero { --g-line: 51, 49, 50; --g-accent: 236, 0, 140; --g-text: 51, 49, 50; }
 .globe {
   position: absolute; inset: 0; width: 100%; height: 100%;
   transform: translateY(calc(var(--hero-p, 0) * 80px)) scale(calc(1 + var(--hero-p, 0) * .07));
@@ -294,10 +294,10 @@ section[id], article[id] { scroll-margin-top: calc(var(--header-h-stuck) + 16px)
 
 /* Cinematic dark hero. Remove has-dark-hero from <body> in index.html to return to the white hero. */
 .has-dark-hero .hero {
-  background: radial-gradient(52% 62% at 72% 46%, rgba(122, 16, 80, .5), transparent 74%), var(--night);
+  background: radial-gradient(52% 62% at 72% 46%, rgba(0, 50, 161, .6), transparent 74%), var(--night);
   color: var(--paper); border-bottom-color: var(--night);
   min-height: clamp(680px, 100svh, 1000px);
-  --g-line: 255, 255, 255; --g-accent: 236, 150, 200; --g-text: 255, 255, 255;
+  --g-line: 255, 255, 255; --g-accent: 236, 0, 140; --g-text: 255, 255, 255;
 }
 .has-dark-hero .hero::after {  /* film grain */
   content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .14; mix-blend-mode: overlay;
@@ -496,21 +496,21 @@ section[id], article[id] { scroll-margin-top: calc(var(--header-h-stuck) + 16px)
 .member .eyebrow { margin: 0; font-size: 13px; letter-spacing: 1.5px; }
 .member > p { font-size: 18px; color: var(--ink-3); }
 
-/* Full-bleed burgundy panel: Advisory hero, and the Advisory band on the home page */
+/* Full-bleed navy panel: Advisory hero, and the Advisory band on the home page */
 .bleed { position: relative; overflow: hidden; background: var(--accent-deep); color: var(--cream); }
 .bleed::before {  /* fine overlapping-circle lattice, drifting very slowly */
   content: ""; position: absolute; inset: -140px; pointer-events: none; opacity: .13;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' fill='none' stroke='%23F4EEE4'%3E%3Ccircle cx='0' cy='0' r='70'/%3E%3Ccircle cx='140' cy='0' r='70'/%3E%3Ccircle cx='0' cy='140' r='70'/%3E%3Ccircle cx='140' cy='140' r='70'/%3E%3Ccircle cx='70' cy='70' r='70'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' fill='none' stroke='%23FAFAFA'%3E%3Ccircle cx='0' cy='0' r='70'/%3E%3Ccircle cx='140' cy='0' r='70'/%3E%3Ccircle cx='0' cy='140' r='70'/%3E%3Ccircle cx='140' cy='140' r='70'/%3E%3Ccircle cx='70' cy='70' r='70'/%3E%3C/svg%3E");
   background-size: 140px 140px; animation: drift 80s linear infinite;
 }
 .bleed::after {  /* soft vignette so the type sits forward */
   content: ""; position: absolute; inset: 0; pointer-events: none;
-  background: radial-gradient(80% 90% at 50% 45%, transparent 40%, rgba(30, 4, 20, .55));
+  background: radial-gradient(80% 90% at 50% 45%, transparent 40%, rgba(0, 8, 36, .55));
 }
 .bleed > * { position: relative; z-index: 1; }
 .bleed .eyebrow { color: var(--rose); }
-.bleed .display em { color: rgba(244, 238, 228, .72); }
-.bleed .lead { color: rgba(244, 238, 228, .86); }
+.bleed .display em { color: rgba(250, 250, 250, .72); }
+.bleed .lead { color: rgba(250, 250, 250, .86); }
 .bleed .arrow-link { color: var(--cream); }
 
 .bleed--hero { min-height: clamp(640px, 100svh, 980px); display: flex; align-items: center; padding-block: calc(var(--header-h) + 32px) 64px; }
