@@ -73,6 +73,21 @@
     });
     places.forEach(function (p) { p.v = unit(p.lat, p.lon); });
 
+    /* Scatter: with o.scatter the land dots start loose, drifting across the whole canvas, and
+       assemble() gathers them into the globe. gather runs 0 (loose) to 1 (the globe). */
+    var gather = o.scatter ? 0 : 1, gT0 = null, gMs = 0, loose = null, floaters = [], par = { x: 0, y: 0, tx: 0, ty: 0 };
+    var seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647; }
+    if (o.scatter) {
+      loose = new Float32Array(land.length / 3 * 4);
+      for (var li = 0; li < loose.length; li += 4) { loose[li] = -.04 + rnd() * 1.08; loose[li + 1] = -.04 + rnd() * 1.08; loose[li + 2] = rnd() * .5; loose[li + 3] = rnd() * 6.283; }
+    }
+    // a few larger shapes that drift down either side, clear of the words in the middle, and lean with the pointer
+    for (var fi = 0; fi < (o.floaters || 0); fi++) floaters.push({ x: (fi % 2 ? .04 : .72) + rnd() * .24, y: .1 + rnd() * .62, d: .3 + rnd() * .7, s: 5 + rnd() * 11, kind: fi % 4, ph: rnd() * 6.283, sp: .12 + rnd() * .2, accent: fi % 5 === 0 });
+    if (floaters.length && !reduce) window.addEventListener('pointermove', function (e) {
+      if (e.pointerType && e.pointerType !== 'mouse') return;
+      par.tx = e.clientX / window.innerWidth * 2 - 1; par.ty = e.clientY / window.innerHeight * 2 - 1;
+    }, { passive: true });
+
     function measure() {
       var r = canvas.getBoundingClientRect(), dpr = Math.min(window.devicePixelRatio || 1, 2), cs = getComputedStyle(canvas);
       W = r.width; H = r.height;
@@ -89,6 +104,10 @@
       if (started === null) started = now;
       var t = Math.max(0, now - started) / 1000, k, e, i, j, n;
       var intro = reduce ? 1 : Math.min(1, t / 2.6); intro = 1 - Math.pow(1 - intro, 3);
+      if (gT0 !== null) { gather = gMs > 0 ? clamp((now - gT0) / gMs, 0, 1) : 1; if (gather >= 1) gT0 = null; }
+      // while the dots are loose, the sphere's own lines stay out of sight; they draw in as the dots arrive
+      var sc = gather < 1, introRaw = intro; intro *= clamp((gather - .5) / .5, 0, 1);
+      par.x += (par.tx - par.x) * .05; par.y += (par.ty - par.y) * .05;
 
       // where we are looking
       if (fly) {
@@ -111,7 +130,7 @@
       view.lon = anchor.lon + (o.sway || 0) * swayAmp * Math.sin(t * 2 * Math.PI / (o.period || 40));
       if (o.onMove) o.onMove(view.lat, wrapLon(view.lon), view.zoom);
 
-      var L = o.layout(W, H, shift), cx = L.cx, cy = L.cy, R = L.R * view.zoom * (.92 + .08 * intro);
+      var L = o.layout(W, H, shift), cx = L.cx + par.x * 8, cy = L.cy + par.y * 6, R = L.R * view.zoom * (.92 + .08 * intro);
       var cl = Math.cos(view.lon * RAD), sl = Math.sin(view.lon * RAD), cp = Math.cos(view.lat * RAD), sp = Math.sin(view.lat * RAD);
       function proj(v, lift) {
         var x = v[0] * cl - v[2] * sl, z1 = v[0] * sl + v[2] * cl, y = v[1] * cp - z1 * sp, z = v[1] * sp + z1 * cp, s = R * (lift || 1);
@@ -147,22 +166,46 @@
 
       // land: dots, revealed from the centre outward as the page opens; the far side shows faintly through
       var size = clamp(R * .0058, 1, 3.2), half = size / 2, x, y, z, z1, b, a;
-      var bucket = [[], [], [], [], []];
-      for (i = 0, n = land.length; i < n; i += 3) {
+      var bucket = [[], [], [], [], [], []], m, gx, gy, fx, fy, dx, dy, len, bend, moving;
+      for (i = 0, m = 0, n = land.length; i < n; i += 3, m++) {
         x = land[i] * cl - land[i + 2] * sl; z1 = land[i] * sl + land[i + 2] * cl;
         y = land[i + 1] * cp - z1 * sp; z = land[i + 1] * sp + z1 * cp;
-        if (z < 0) { if (z > -.96 && (i / 3) % 2 === 0) bucket[0].push(cx + x * R, cy - y * R); continue; }
-        if (intro < 1 && 1 - z > intro * 1.25) continue;
+        gx = cx + x * R; gy = cy - y * R; moving = false;
+        if (sc) {   // on its way in from where it was drifting, along a slight curve
+          j = m * 4; e = easeInOut(clamp(gather * 1.5 - loose[j + 2], 0, 1)); moving = e < 1;
+          if (moving) {
+            fx = loose[j] * W + Math.sin(t * .35 + loose[j + 3]) * 16 + par.x * 14; fy = loose[j + 1] * H + Math.cos(t * .28 + loose[j + 3] * 1.7) * 16 + par.y * 10;
+            dx = gx - fx; dy = gy - fy; len = Math.hypot(dx, dy) || 1; bend = Math.sin(Math.PI * e) * Math.min(90, len * .3) * (m % 2 ? 1 : -1);
+            gx = fx + dx * e - dy / len * bend; gy = fy + dy * e + dx / len * bend;
+          }
+        }
+        if (z < 0) { if (z > -.96 && m % 2 === 0) bucket[0].push(gx, gy); else if (moving) bucket[5].push(gx, gy); continue; }
+        if (!sc && intro < 1 && 1 - z > intro * 1.25) continue;
         b = z > .75 ? 4 : z > .5 ? 3 : z > .25 ? 2 : 1;
-        bucket[b].push(cx + x * R, cy - y * R);
+        bucket[b].push(gx, gy);
       }
-      var alpha = [.07 * intro, .2, .34, .46, .56];
-      for (b = 0; b < 5; b++) {
+      var alpha = sc ? [(.07 + .17 * (1 - gather)) * introRaw, .2 * introRaw, .34 * introRaw, .46 * introRaw, .56 * introRaw, .24 * (1 - gather) * introRaw] : [.07 * intro, .2, .34, .46, .56, 0];
+      for (b = 0; b < 6; b++) {
         a = bucket[b]; if (!a.length) continue;
         ctx.fillStyle = rgba(col.dot, alpha[b]); ctx.beginPath();
         for (i = 0; i < a.length; i += 2) { if (a[i] < -4 || a[i] > W + 4 || a[i + 1] < -4 || a[i + 1] > H + 4) continue; ctx.rect(a[i] - half, a[i + 1] - half, size, size); }
         ctx.fill();
       }
+
+      // drifting shapes: loud while the dots are loose, quiet once the globe has formed, and never over the globe itself
+      floaters.forEach(function (f, idx) {
+        if (W < 720 && (idx % 2 || f.y > .3)) return;
+        var px = f.x * W + (reduce ? 0 : Math.sin(t * f.sp + f.ph) * 26 * f.d) + par.x * 40 * f.d, py = f.y * H + (reduce ? 0 : Math.cos(t * f.sp * .8 + f.ph) * 20 * f.d) + par.y * 28 * f.d;
+        var away = clamp((Math.hypot(px - cx, py - cy) - R * 1.15) / (R * .3), 0, 1), al = (.2 + .4 * f.d) * introRaw * (1 - gather * (1 - away * .55)), s = f.s;
+        if (al < .01) return;
+        ctx.save(); ctx.translate(px, py); ctx.rotate(reduce ? f.ph : f.ph + t * f.sp * .5);
+        ctx.strokeStyle = rgba(f.accent ? col.accent : col.dot, al); ctx.fillStyle = ctx.strokeStyle; ctx.lineWidth = 1.1; ctx.beginPath();
+        if (f.kind === 0) { ctx.moveTo(0, -s); ctx.lineTo(s * .7, 0); ctx.lineTo(0, s); ctx.lineTo(-s * .7, 0); ctx.closePath(); ctx.stroke(); }
+        else if (f.kind === 1) { ctx.arc(0, 0, s * .6, 0, 7); ctx.stroke(); }
+        else if (f.kind === 2) { ctx.moveTo(-s * .6, 0); ctx.lineTo(s * .6, 0); ctx.moveTo(0, -s * .6); ctx.lineTo(0, s * .6); ctx.stroke(); }
+        else { ctx.rect(-s * .22, -s * .22, s * .44, s * .44); ctx.fill(); }
+        ctx.restore();
+      });
 
       // arcs between places, each with a pulse of light travelling along it
       links.forEach(function (pair, idx) {
@@ -180,11 +223,11 @@
         ctx.stroke();
         if (reduce || active) return;
         head = ((t * .2 + idx * .41) % 1.35);
-        ctx.save(); ctx.shadowColor = rgba(col.accent, .9); ctx.shadowBlur = 12; ctx.lineWidth = 2.2;
+        ctx.save(); ctx.shadowColor = rgba(col.accent, .9 * intro); ctx.shadowBlur = 12; ctx.lineWidth = 2.2;
         for (s = 1; s <= 48; s++) {
           k = s / 48; al = 1 - (head - k) / .22;
           if (k > head || al <= 0 || !pts[s][2] || !pts[s - 1][2]) continue;
-          ctx.strokeStyle = rgba(col.accent, al); ctx.beginPath(); ctx.moveTo(pts[s - 1][0], pts[s - 1][1]); ctx.lineTo(pts[s][0], pts[s][1]); ctx.stroke();
+          ctx.strokeStyle = rgba(col.accent, al * intro); ctx.beginPath(); ctx.moveTo(pts[s - 1][0], pts[s - 1][1]); ctx.lineTo(pts[s][0], pts[s][1]); ctx.stroke();
         }
         ctx.restore();
       });
@@ -205,7 +248,7 @@
       }
       places.forEach(function (pl) {
         if (active === pl.id && groups.some(function (gr) { return gr.place === pl.id; })) return;   // its ventures are drawn instead
-        p = proj(pl.v); if (p[2] < .08) return;
+        p = proj(pl.v); if (p[2] < .08 || intro < .05) return;
         var fade = clamp((p[2] - .08) * 5, 0, 1) * intro * (active && active !== pl.id ? .45 : 1), hot = hoverHit && hoverHit.id === pl.id;
         ctx.strokeStyle = rgba(col.accent, (1 - beat) * .7 * fade); ctx.lineWidth = 1.2;
         ctx.beginPath(); ctx.arc(p[0], p[1], 5 + beat * 20, 0, 7); ctx.stroke();
@@ -270,6 +313,7 @@
     this.setShift = function (v) { shiftTo = v; };
     this.aim = function (a) { aim = a; wake(); };
     this.setHover = function (id) { hoverHit = id ? { id: id } : null; };
+    this.assemble = function (ms) { gT0 = performance.now(); gMs = reduce ? 0 : (ms || 2600); wake(); };
     this.render = function (now) { measure(); draw(now); };   // one frame on demand
 
     if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { onScreen = en[0].isIntersecting; wake(); }).observe(canvas);
@@ -290,8 +334,9 @@
     var chips = [].slice.call(doc.querySelectorAll('[data-place][data-lat]')), rest = { lat: 14, lon: -34, zoom: 1 };
     var places = chips.map(function (a) { return { id: a.getAttribute('data-place'), name: a.getAttribute('data-name') || a.textContent, lat: +a.getAttribute('data-lat'), lon: +a.getAttribute('data-lon'), href: a.getAttribute('href') }; });
     var links = []; places.forEach(function (p, i) { if (places.length > 1) links.push([i, (i + 1) % places.length]); });
+    var gate = doc.querySelector('[data-gate]'), gated = !!gate && root.classList.contains('gate-open');
     var globe = new Globe(homeCanvas, {
-      view: rest, sway: 14, period: 44, places: places, links: links,
+      view: rest, sway: 14, period: 44, places: places, links: links, scatter: gated, floaters: 16,
       // shift 0: centred behind the logo. shift 1 (during the journey): moved aside to leave room for the words
       layout: function (W, H, shift) {
         var wide = W >= 860;
@@ -354,6 +399,38 @@
     function onScroll() { if (queued) return; queued = true; requestAnimationFrame(function () { queued = false; update(); }); }
     if (steps.length) { window.addEventListener('scroll', onScroll, { passive: true }); window.addEventListener('resize', onScroll); update(); }
     window.__homeGlobe = globe; window.__journey = update;
+
+    /* The threshold: shown once per visit (the <div data-gate> in the page holds its words). While the page
+       loads, the line fills; then the welcome and its button appear. The button gathers the dots into the globe. */
+    if (gated) (function () {
+      window.__gate = true;
+      var bar = gate.querySelector('.gate__bar i'), count = gate.querySelector('.gate__count'), btn = gate.querySelector('[data-gate-enter]');
+      var done = 0, shown = 0, t0 = performance.now(), img = doc.querySelector('.stage__logo img');
+      function part() { done++; }
+      if (doc.fonts && doc.fonts.ready) doc.fonts.ready.then(part, part); else part();
+      if (doc.readyState === 'complete') part(); else window.addEventListener('load', part);
+      if (img && !img.complete) { img.addEventListener('load', part); img.addEventListener('error', part); } else part();
+      window.scrollTo(0, 0);
+      function step() {
+        var now = performance.now(), want = Math.min(done / 3, (now - t0) / 1800);
+        if (reduce || now - t0 > 7000) want = 1;   // never hold anyone at the door
+        shown = want >= 1 && shown > .97 || reduce ? 1 : shown + (want - shown) * .14;
+        if (bar) bar.style.transform = 'scaleX(' + shown.toFixed(3) + ')';
+        if (count) count.textContent = Math.round(shown * 100);
+        if (shown < 1) return setTimeout(step, 32);
+        root.classList.add('gate-ready');
+        setTimeout(function () { try { btn.focus({ preventScroll: true }); } catch (err) {} }, 500);
+      }
+      step();
+      function enter() {
+        if (!root.classList.contains('gate-ready')) return;
+        try { window.sessionStorage.setItem('inl-entered', '1'); } catch (err) {}
+        root.classList.remove('gate-open', 'gate-ready'); root.classList.add('gate-leaving');
+        globe.assemble(2800);
+        setTimeout(function () { root.classList.remove('gate-leaving'); gate.hidden = true; }, reduce ? 0 : 1500);
+      }
+      if (btn) btn.addEventListener('click', enter);
+    })();
   })();
 
   /* ------------------------------------------------------------------------

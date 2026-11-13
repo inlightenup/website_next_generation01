@@ -397,3 +397,64 @@ html:not(.atlas-on) .atlas__head { position: static; margin-inline: var(--gutter
   .atlas__place-name { font-size: 14px; } .atlas__places { width: 280px; }
   .atlas__panel, .atlas__drawer { width: min(580px, calc(100% - 2 * var(--gutter))); }
 }
+
+/* 7. The welcome screen ----------------------------------------------------
+   On the first visit of a session the home page opens on the logo alone, with the globe's dots
+   drifting loose. A line fills while the page loads, then the welcome and its button appear;
+   the button gathers the dots into the globe and lets the page begin. The words are in index.html. */
+.gate { display: none; }
+.gate-open .gate, .gate-leaving .gate { display: grid; }
+.gate {
+  position: absolute; z-index: 3; left: 0; right: 0; top: calc(45% + clamp(100px, 15vh, 160px) + 6px);
+  justify-items: center; text-align: center; padding-inline: var(--gutter);
+  transition: opacity .6s ease, transform .9s var(--ease);
+}
+.gate-leaving .gate { opacity: 0; transform: translateY(-12px); pointer-events: none; }
+.gate__load, .gate__ready { grid-area: 1 / 1; transition: opacity .6s ease, transform .9s var(--ease), visibility 0s linear .6s; }
+.gate__load { display: grid; justify-items: center; align-content: start; gap: 16px; padding-top: 18px; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--mute); font-variant-numeric: tabular-nums; }
+.gate__bar { position: relative; width: min(240px, 56vw); height: 1px; background: var(--grey-1); }
+.gate__bar i { position: absolute; left: 0; right: 0; top: -1px; height: 2px; background: var(--char); transform: scaleX(0); transform-origin: left; }
+.gate__ready { opacity: 0; visibility: hidden; transform: translateY(14px); }
+.gate-ready .gate__load { opacity: 0; visibility: hidden; }
+.gate-ready .gate__ready { opacity: 1; visibility: visible; transform: none; transition-delay: .3s, .3s, 0s; }
+.gate__title { margin-top: 10px; font-family: var(--display); font-weight: 400; font-size: clamp(32px, 3.8vw, 56px); line-height: 1.05; letter-spacing: -.01em; }
+.gate__title em { color: #7C7A7B; }
+.gate__enter {
+  margin-top: 24px; display: inline-flex; align-items: center; gap: 18px; padding: 7px 7px 7px 26px;
+  border: 0; background: var(--char); color: var(--off); cursor: pointer;
+  font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
+  transition: background .4s ease;
+}
+.gate__enter span { display: grid; place-items: center; width: 46px; height: 46px; background: var(--off); color: var(--char); transition: background .4s ease, color .4s ease; }
+.gate__enter svg { transition: transform .5s var(--ease); }
+.gate__enter:hover, .gate__enter:focus-visible { background: var(--char-deep); }
+.gate__enter:hover span, .gate__enter:focus-visible span { background: var(--blue); color: var(--off); }
+.gate__enter:hover svg, .gate__enter:focus-visible svg { transform: translateX(3px); }
+.gate__enter:focus-visible { outline: 2px solid var(--blue); outline-offset: 4px; }
+
+/* while the welcome is up: no scrolling, and the rest of the stage waits its turn */
+html.gate-open, html.gate-open body { overflow: hidden; }
+.has-stage .site-header { transition: background .4s ease, border-color .4s ease, opacity .9s ease; }
+.gate-open .site-header, .gate-leaving .site-header { opacity: 0; pointer-events: none; }
+.gate-open .site-header { visibility: hidden; }
+.gate-open .stage__foot, .gate-leaving .stage__foot, .gate-open .stage__hint, .gate-leaving .stage__hint, .gate-open .stage__cue, .gate-leaving .stage__cue { visibility: hidden; }
+.gate-open .stage__foot .fade-in, .gate-leaving .stage__foot .fade-in, .gate-open .stage__foot .mask > span, .gate-leaving .stage__foot .mask > span,
+.gate-open .stage__hint, .gate-leaving .stage__hint, .gate-open .stage__cue, .gate-leaving .stage__cue { animation: none; }
+html.js.gate-open .stage__logo { animation-duration: 2.2s; }
+
+/* the cue at the foot of the stage, once inside */
+.stage__cue { position: absolute; left: 50%; bottom: clamp(20px, 3.4vh, 36px); margin-left: -70px; width: 140px; text-align: center; font-family: var(--sans); font-size: 10px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--mute); pointer-events: none; transition: opacity .4s ease; }
+.stage__cue i { display: block; width: 1px; height: 34px; margin: 10px auto 0; background: linear-gradient(var(--char), var(--char)) no-repeat top / 100% 40%, var(--grey-1); animation: cue 2.2s var(--ease) infinite; }
+@keyframes cue { from { background-position: 0 -14px, 0 0; } to { background-position: 0 34px, 0 0; } }
+.journey-under-way .stage__cue { opacity: 0 !important; }
+
+@media (max-width: 899px) {
+  .gate { top: calc(40% + clamp(75px, 21vw, 110px) + 2px); }
+  .gate__title { font-size: 32px; }
+  .gate__where { display: none; }
+  .gate__enter { margin-top: 20px; }
+}
+@media (max-width: 1399px) { .stage__cue { display: none; } }
+@media (max-height: 620px) { .gate .eyebrow { display: none; } .gate__enter { margin-top: 14px; } .gate__enter span { width: 40px; height: 40px; } }
+@media (prefers-reduced-motion: reduce) { .gate, .gate__load, .gate__ready { transition: none; } .stage__cue i { animation: none; } }
+@media (min-width: 1900px) { .gate__enter { font-size: 14px; } .gate__enter span { width: 54px; height: 54px; } .stage__cue { font-size: 12px; } }

@@ -16,6 +16,8 @@
 <link rel="stylesheet" href="site.css">
 <link rel="stylesheet" href="atlas.css">
 <script>document.documentElement.classList.add('js');setTimeout(function(){if(!window.__site)document.documentElement.classList.remove('js')},4000)</script>
+<!-- The welcome screen: shown on the first visit of a session, skipped for links to a section (index.html#start). Add ?welcome to the address to see it again. -->
+<script>(function(){var r=document.documentElement,seen=false;try{seen=!!sessionStorage.getItem('inl-entered')}catch(e){}if((!seen&&!location.hash)||/[?&]welcome\b/.test(location.search)){r.classList.add('gate-open');setTimeout(function(){if(!window.__gate)r.classList.remove('gate-open')},4000)}})()</script>
 </head>
 <body class="has-stage">
 
@@ -38,6 +40,17 @@
 <canvas class="stage__globe" data-globe="home" aria-hidden="true"></canvas>
 <div class="stage__logo"><img src="assets/logo-dark.png" alt="inlightenup" width="2028" height="1828"></div>
 <p class="stage__hint fade-in" style="--d:1600ms">Drag to turn the globe</p>
+<p class="stage__cue fade-in" style="--d:1900ms" aria-hidden="true">Scroll to travel<i></i></p>
+
+<!-- The welcome screen. Edit the words here; atlas.js runs the loading line and the button. -->
+<div class="gate" data-gate>
+<div class="gate__load" role="status"><span class="gate__bar"><i></i></span><span><span class="gate__count">0</span>% · Gathering the atlas</span></div>
+<div class="gate__ready">
+<p class="eyebrow">Impact venture capital<span class="gate__where"> · New York · Brazil · Italy</span></p>
+<p class="gate__title">Welcome to <em>inlightenup</em></p>
+<button type="button" class="gate__enter" data-gate-enter>Begin the journey<span><svg width="22" height="12" viewBox="0 0 22 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M0 6h20M15 1l5 5-5 5"/></svg></span></button>
+</div>
+</div>
 
 <div class="wrap stage__foot">
 <h1 class="stage__title"><span class="eyebrow eyebrow--accent fade-in">Impact venture capital</span><span class="mask"><span style="--d:300ms">Structure</span></span><span class="mask"><span style="--d:450ms"><em>before story</em></span></span></h1>
