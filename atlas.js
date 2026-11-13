@@ -379,7 +379,7 @@
     }
 
     // 2. Methodology: the five stages become a path that the page walks along, each ending at its gate
-    var list = doc.querySelector('ol.stages'), table = doc.querySelector('table.gates'), wide = window.matchMedia('(min-width: 900px)');
+    var list = doc.querySelector('ol.stages'), table = doc.querySelector('table.gates'), wide = window.matchMedia('(min-width: 1px)');   // the path runs at every width; phones get a stacked layout from atlas.css
     if (list && table && table.tBodies[0]) (function () {
       var stages = [].map.call(list.children, function (li) {
         function t(sel) { var n = li.querySelector(sel); return n ? n.textContent : ''; }
